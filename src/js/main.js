@@ -1,21 +1,6 @@
 angular
   .module('socialNetwork', ["ngRoute"])
   .constant('API_URL', 'https://socialnetwork.firebaseio.com/')
-  .controller('LoginCtrl', function ($http, Auth) {
-    var vm = this;
-
-    vm.login = function () {
-         console.log('function firing')
-         Auth.login(vm.email, vm.password, function () {})
-    };
-
-    vm.register = function ($location) {
-
-    }
-
-    vm.showRegistration = false;
-
-  })
 
   .config(function ($routeProvider) {
     $routeProvider
@@ -29,6 +14,28 @@ angular
         controller: 'ProfileCtrl',
         controllerAs: 'profedit'
       })
+  })
+
+  .controller('LoginCtrl', function ($http, Auth) {
+    var vm = this;
+
+    vm.login = function () {
+        console.log('function firing')
+        Auth.login(vm.email, vm.password, function () {
+  
+        })
+    };
+
+    vm.register = function ($location) {
+        Auth.register(vm.email, vm.password, function() {
+          Auth.login(vm.email, vm.password, function() {
+  
+          })
+        })
+    }
+
+    vm.showRegistration = false;
+
   })
 
   .factory('Auth', function (API_URL, $location, $rootScope) {

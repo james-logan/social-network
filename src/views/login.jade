@@ -1,12 +1,7 @@
-form(name="Login Form" ng-submit="logger.login()")
+form(name="Login Form")
   form-label Email
   input(type="text" placeholder="Email" ng-model="logger.email")
   form-label Password
   input(type="text" placeholder="Email" ng-model="logger.password")
-  input(type="submit" value="Login")
-  button(ng-click="logger.register() ") New User?
-  form-label Name
-  input(type="text")
-  form-label Photo
-  input(type="text")
-  form-label
+  button(ng-click="logger.login()") Login
+  button(ng-click="logger.register()") New User?
