@@ -17,6 +17,20 @@ angular
 
   })
 
+  .config(function ($routeProvider) {
+    $routeProvider
+      .when('/login', {
+        templateUrl: 'views/login.html',
+        controller: 'LoginCtrl',
+        controllerAs: 'logger'
+      })
+      .when('/profileform', {
+        templateUrl: 'views/profile.html',
+        controller: 'ProfileCtrl',
+        controllerAs: 'profedit'
+      })
+  })
+
   .factory('Auth', function (API_URL, $location, $rootScope) {
     var fb = new Firebase(API_URL);
 
