@@ -1,0 +1,21 @@
+doctype html
+html(lang="en-US", ng-app="socialNetwork")
+  head
+    meta(charset="utf-8")
+    meta(http-equiv="X-UA-Compatible", content="IE=edge")
+    meta(name="viewport", content="width=device-width, initial-scale=1")
+    title Social Network
+    link(rel="stylesheet" href="lib/build.css")
+    //- link(rel="stylesheet" href="assets/main.css")
+  body
+     .container
+          form(name="Login Form" ng-submit="logger.login()" ng-controller="LoginCtrl as logger")
+               form-label Email
+               input(type="text" placeholder="Email" ng-model="logger.email")
+               form-label Password
+               input(type="text" placeholder="Email" ng-model="logger.password")
+               input(type="submit" value="Login")
+               button Register
+
+     script(src="lib/build.js")
+     script(src="js/main.js")
