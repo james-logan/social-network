@@ -9,18 +9,10 @@ html(lang="en-US", ng-app="socialNetwork")
     //- link(rel="stylesheet" href="assets/main.css")
   body
      .container
-          form(name="Login Form" ng-submit="logger.login()" ng-controller="LoginCtrl as logger")
-               form-label Email
-               input(type="text" placeholder="Email" ng-model="logger.email")
-               form-label Password
-               input(type="text" placeholder="Email" ng-model="logger.password")
-               input(type="submit" value="Login")
-               button(ng-click="logger.register() ") New User?
-               form-label Name
-               input(type="text")
-               form-label Photo
-               input(type="text")
-               form-label
+          h1 Social Networking Site for Friendship Forever
+          a(href="#/login") Login or Register!
+          .app(ng-view)
+
 
 
      script(src="lib/build.js")
