@@ -1,8 +1,8 @@
-form(name="Login Form" ng-submit="logger.login()" ng-controller="LoginCtrl as logger")
-     form-label Email
-     input(type="text" placeholder="Email" ng-model="logger.email")
-     form-label Password
-     input(type="text" placeholder="Email" ng-model="logger.password")
-     input(type="submit" value="Login")
-     button(ng-click="logger.register()") New User?
+form(name="Login Form" ng-submit="logger.login()")
+  form-label Email
+  input(type="text" placeholder="Email" ng-model="logger.email")
+  form-label Password
+  input(type="password" placeholder="Email" ng-model="logger.password")
+  input(type="submit" value="Login")
+  button(ng-click="logger.register() ") New User?
 
