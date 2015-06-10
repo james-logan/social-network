@@ -1,7 +1,7 @@
 angular
      .module('socialNetwork', [])
      .controller('LoginCtrl', function ($http, Auth) {
-          vm = this;
+          var vm = this;
 
           vm.login = function () {
                console.log('function firing')
@@ -13,8 +13,8 @@ angular
      .factory('Auth', function ($rootScope) {
           return {
                login: function (email, password, cb) {
-                    fb = new Firebase('https://socialnetwork.firebaseio.com/people');
-                    fb.auth({
+                    var fb = new Firebase('https://socialnetwork.firebaseio.com/people');
+                    fb.authWithPassword({
                          email: email,
                          password: password
                     }, function (err, authData) {
