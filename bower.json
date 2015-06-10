@@ -1,0 +1,19 @@
+{
+  "name": "social-network",
+  "version": "1.0.0",
+  "homepage": "https://github.com/james-logan/social-network",
+  "authors": [
+    "James Logan",
+    "John Quarles",
+    "Brien Pafford"
+  ],
+  "main": "index.html",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
