@@ -38,6 +38,13 @@ angular
 
   })
 
+  .controller('LogoutCtrl', function($http, Auth) {
+    Auth.logout(function() {
+      $rootScope.auth = null;
+      
+    })
+  })
+
   .factory('Auth', function (API_URL, $location, $rootScope) {
     var fb = new Firebase(API_URL);
 
