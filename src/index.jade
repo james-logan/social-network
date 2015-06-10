@@ -15,7 +15,13 @@ html(lang="en-US", ng-app="socialNetwork")
                form-label Password
                input(type="text" placeholder="Email" ng-model="logger.password")
                input(type="submit" value="Login")
-               button Register
+               button(ng-click="logger.register() ") New User?
+               form-label Name
+               input(type="text")
+               form-label Photo
+               input(type="text")
+               form-label
+
 
      script(src="lib/build.js")
      script(src="js/main.js")
