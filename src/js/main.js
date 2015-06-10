@@ -16,6 +16,15 @@ angular
     vm.showRegistration = false;
 
   })
+  // .controller('ProfileCtrl', function ($http, $location, $rootScope) {
+  //    var vm = this;
+
+  //    vm.editProfile = function ($rootScope.auth.uid) {
+  //         $http
+  //              .put(`${API_URL}profiles/${$rootScope.auth.uid}.json`);
+  //    }
+
+  // })
 
   .config(function ($routeProvider) {
     $routeProvider
