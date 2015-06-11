@@ -2,36 +2,78 @@ angular
   .module('socialNetwork', ["ngRoute"])
   .constant('API_URL', 'https://socialnetwork.firebaseio.com/')
 
+  .run(function(Auth, $rootScope) {
+  // can access private property within nextRoute argument.
+    $rootScope.$on('$routeChangeStart', function(event, nextRoute) {
+
+      if (nextRoute.$$route && nextRoute.$$route.private) {
+        Auth.requireLogin();
+      }
+    })
+  })
+
   .config(function ($routeProvider) {
     $routeProvider
       .when('/login', {
         templateUrl: 'views/login.html',
         controller: 'LoginCtrl',
-        controllerAs: 'logger'
+        controllerAs: 'logger',
+        resolve: {
+          checkLogin: function ($rootScope, $location) {
+            if ($rootScope.auth) {
+              $location.path('/people');
+            }
+          }
+        }
       })
-      .when('/profileform', {
+      .when('/newprofile', {
         templateUrl: 'views/profile.html',
-        controller: 'ProfileCtrl',
+        controller: 'EditProfileCtrl',
         controllerAs: 'profedit'
+      })
+      .when('/potentialfriends', {
+        templateUrl: 'views/potentialfriends.html',
+        controller: 'PotFriendsCtrl',
+        controllerAs: 'pfctrl'
       })
   })
 
-  .controller('LoginCtrl', function ($http, Auth) {
+  .filter('objToArr', function () {
+    return function (obj) {
+      if (obj) {
+        return Object
+          .keys(obj)
+          .map(function (key) {
+            obj[key]._id = key;
+            return obj[key];
+          });
+      }
+    }
+  })
+
+  .controller('PotFriendsCtrl', function (Friends) {
+    var vm = this;
+
+    Friends.getAll(function(friends) {
+      vm.potfriends = friends;
+    })
+  })
+
+  .controller('LoginCtrl', function ($scope, $http, Auth) {
     var vm = this;
 
     vm.login = function () {
-        console.log('function firing')
-        Auth.login(vm.email, vm.password, function () {
-  
-        })
+      console.log('function firing')
+      Auth.login(vm.email, vm.password, function () {
+        Auth.requireProfile();
+        $scope.$apply();
+      })
     };
 
     vm.register = function ($location) {
-        Auth.register(vm.email, vm.password, function() {
-          Auth.login(vm.email, vm.password, function() {
-  
-          })
-        })
+      Auth.register(vm.email, vm.password, function() {
+        vm.login();
+      })
     }
 
     vm.showRegistration = false;
@@ -41,8 +83,24 @@ angular
   .controller('LogoutCtrl', function($http, Auth) {
     Auth.logout(function() {
       $rootScope.auth = null;
-      
+
     })
+  })
+
+  .controller('EditProfileCtrl', function() {
+
+  })
+
+  .factory('Friends', function ($http, API_URL) {
+    return {
+
+      getAll(cb) {
+        $http
+          .get(`${API_URL}/profiles.json`)
+          .success(cb);
+      }
+
+    }
   })
 
   .factory('Auth', function (API_URL, $location, $rootScope) {
@@ -56,6 +114,25 @@ angular
           $location.path('/login');
         } else if ($rootScope.auth && $rootScope.auth.password.isTemporaryPassword) {
           $location.path('/temp_pass')
+        }
+      },
+
+      // need to clarify firebase data structure for this function below;
+      // I'm assuming we'll have a profiles object & a friend list object,
+      // within which we'll have individual user objects accessible via
+      // their uids as keys.
+
+      // only use requireProfile for users who are already logged in (or you could check for that within the function);
+
+      requireProfile() {
+        var hasProfile;
+        fb.child("profiles").child($rootScope.auth.uid).once('value', function(data) {
+          hasProfile = data.exists();
+        })
+        if (!hasProfile) {
+          $location.path('/newprofile');
+        } else {
+          $location.path('/potentialfriends');
         }
       },
 
@@ -74,6 +151,7 @@ angular
           if (err) {
             console.log('Error', err)
           } else {
+            console.log("setting root scope authData")
             $rootScope.auth = authData;
             cb();
           }
