@@ -6,10 +6,15 @@ angular
 
     vm.login = function () {
          console.log('function firing')
-         Auth.login(vm.email, vm.password, function () {})
+         Auth.login(vm.email, vm.password, function ($location) {
+               $location.path("/")
+         })
     };
 
     vm.register = function ($location) {
+          Auth.register(vm.email, vm.password, function ($location) {
+               $location.path("/profileform");
+          });
 
     }
 
@@ -34,7 +39,7 @@ angular
         controllerAs: 'logger'
       })
       .when('/profileform', {
-        templateUrl: 'views/profile.html',
+        templateUrl: 'views/profileform.html',
         controller: 'ProfileCtrl',
         controllerAs: 'profedit'
       })
