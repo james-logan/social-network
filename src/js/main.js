@@ -98,7 +98,7 @@ angular
       })
   })
 
-  .controller('PotFriendsCtrl', function (Friends, $rootScope) {
+  .controller('PotFriendsCtrl', function (Friends, $rootScope, $route) {
     var vm = this;
 
     Friends.getAll(function(people) {
@@ -144,6 +144,7 @@ angular
     vm.addFriend = function(name, photo_url, id) {
       console.log(id);
       Friends.addFriend(name, photo_url, id, function() {})
+      $route.reload();
     }
 
   })
