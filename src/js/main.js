@@ -72,9 +72,9 @@ angular
   .controller('FriendsListCtrl', function ($http, $rootScope, API_URL, Friends) {
     var vm = this;
 
-    Friends.getAllFriends(function (data) {
+    Friends.getAllFriends(function (kittens) {
       console.log('where are all the friends?')
-      vm.data = data;
+      vm.data = kittens;
     })
 
   })
@@ -174,9 +174,10 @@ angular
       addFriend(cb) {
       },
       getAllFriends(cb){
+        debugger;
         $http
-          .get(`${API_URL}friendlist)/${$rootScope.auth.uid}.json`)
-          .success(cb());
+          .get(`${API_URL}friendlist/${$rootScope.auth.uid}.json`)
+          .success(cb);
       }
     }
   })
