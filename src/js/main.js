@@ -98,7 +98,7 @@ angular
       })
   })
 
-  .controller('PotFriendsCtrl', function (Friends) {
+  .controller('PotFriendsCtrl', function (Friends, $rootScope) {
     var vm = this;
 
     Friends.getAll(function(people) {
@@ -108,15 +108,19 @@ angular
       });
 
       Friends.getAllFriends(function(friends) {
-        var peopleAlreadyFriendedArray = Object.keys(friends).map(function (key) {
-          friends[key]._id = key;
-          return friends[key];
-        });
-        
+        if (friends) {
+          var peopleAlreadyFriendedArray = Object.keys(friends).map(function (key) {
+            friends[key]._id = key;
+            return friends[key];
+          });
+        } else {
+          var peopleAlreadyFriendedArray = [];
+        }
+
         var includeThesePeople = peopleNotYetFriendedArray.filter(function(person) {
           var alreadyFriended = false;
           peopleAlreadyFriendedArray.forEach(function(friend) {
-            if (person._id === friend._id) {
+            if (person._id === friend._id || person._id === $rootScope.auth.uid) {
               alreadyFriended = true;
             }
           })
@@ -136,7 +140,7 @@ angular
       })
 
     })
-    
+
     vm.addFriend = function(name, photo_url, id) {
       console.log(id);
       Friends.addFriend(name, photo_url, id, function() {})
