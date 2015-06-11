@@ -2,4 +2,5 @@ h1 Old Friends You Already Friended
 
 .potfriend(ng-repeat="friend in flCtrl.data | objToArr | orderBy:'name' | filter:query")
   p {{friend.name}}
-  img(ng-src="{{friend.photo}}")
+  a(href="#/friendprofile/{{friend.id}}")
+     img(ng-src="{{friend.photo}}")

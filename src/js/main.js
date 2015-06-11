@@ -67,8 +67,22 @@ angular
         controllerAs: 'flCtrl',
         private: true
       })
+      .when('/friendprofile/:id', {
+        templateUrl: 'views/profile.html',
+        controller: 'FriendProfileCtrl',
+        controllerAs: 'profctrl',
+        private: true
+      })
   })
 
+  .controller('FriendProfileCtrl', function ($routeParams, $http, API_URL) {
+    var vm = this;
+    $http
+      .get(`${API_URL}profiles/${$routeParams.id}.json`)
+      .success(function (data) {
+        vm.data = data;
+      })
+  })
   .controller('FriendsListCtrl', function ($http, $rootScope, API_URL, Friends) {
     var vm = this;
 
@@ -174,7 +188,6 @@ angular
       addFriend(cb) {
       },
       getAllFriends(cb){
-        debugger;
         $http
           .get(`${API_URL}friendlist/${$rootScope.auth.uid}.json`)
           .success(cb);
