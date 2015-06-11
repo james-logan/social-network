@@ -1,26 +1,6 @@
 angular
   .module('socialNetwork', ["ngRoute"])
   .constant('API_URL', 'https://socialnetwork.firebaseio.com/')
-  // .controller('LoginCtrl', function ($http, Auth) {
-  //   var vm = this;
-
-  //   vm.login = function () {
-  //        console.log('function firing')
-  //        Auth.login(vm.email, vm.password, function ($location) {
-  //              $location.path("/")
-  //        })
-  //   };
-
-  //   vm.register = function ($location) {
-  //         Auth.register(vm.email, vm.password, function ($location) {
-  //              $location.path("/profileform");
-  //         });
-
-  //   }
-
-  //   vm.showRegistration = false;
-
-  // })
 
   .run(function(Auth, $rootScope, API_URL) {
      // var fb = new Firebase(API_URL);
@@ -56,6 +36,10 @@ angular
           }
         }
       })
+      .when('/logout', {
+        template: '<h1>Logging out...</h1>',
+        controller: 'LogoutCtrl'
+      })
       // .when('/profileform', {
       //   templateUrl: 'views/profileform.html',
       //   controller: 'ProfileCtrl',
@@ -77,6 +61,22 @@ angular
         controllerAs: "profctrl",
         private: true
       })
+      .when('/friendslist', {
+        templateUrl: 'views/friendslist.html',
+        controller: 'FriendsListCtrl',
+        controllerAs: 'flCtrl',
+        private: true
+      })
+  })
+
+  .controller('FriendsListCtrl', function ($http, $rootScope, API_URL, Friends) {
+    var vm = this;
+
+    Friends.getAllFriends(function (data) {
+      console.log('where are all the friends?')
+      vm.data = data;
+    })
+
   })
 
   .filter('objToArr', function () {
@@ -91,20 +91,33 @@ angular
       }
     }
   })
+
   .controller('ProfileCtrl', function ($http, API_URL, $rootScope) {
     var vm = this;
+
+    // var fb = new Firebase(API_URL);
+    // fb.child("profiles").child($rootScope.auth.uid).once('value', function(data) {
+    //   vm.data = data.val();
+    // });
+
     $http
       .get(`${API_URL}profiles/${$rootScope.auth.uid}.json`)
-      .success(function (data) {
-        vm.data = data;
+      .success(function(data) {
+        vm.data = data
       })
   })
+
   .controller('PotFriendsCtrl', function (Friends) {
     var vm = this;
 
     Friends.getAll(function(friends) {
       vm.potfriends = friends;
     })
+
+    vm.addFriend = function(id) {
+      console.log(id);
+    }
+
   })
 
   .controller('LoginCtrl', function ($scope, $http, Auth) {
@@ -113,7 +126,9 @@ angular
     vm.login = function () {
       console.log('function firing')
       Auth.login(vm.email, vm.password, function () {
-        Auth.requireProfile(function () {$scope.$apply();});
+        Auth.requireProfile(function() {
+          $scope.$apply();
+        });
       })
     };
 
@@ -149,15 +164,20 @@ angular
     }
   })
 
-  .factory('Friends', function ($http, API_URL) {
+  .factory('Friends', function ($http, API_URL, $rootScope) {
     return {
-
       getAll(cb) {
         $http
           .get(`${API_URL}/profiles.json`)
           .success(cb);
+      },
+      addFriend(cb) {
+      },
+      getAllFriends(cb){
+        $http
+          .get(`${API_URL}friendlist)/${$rootScope.auth.uid}.json`)
+          .success(cb());
       }
-
     }
   })
 
@@ -187,18 +207,13 @@ angular
         var hasProfile;
         fb.child("profiles").child($rootScope.auth.uid).once('value', function(data) {
           hasProfile = data.exists();
-          console.log('hasProfile', hasProfile);
           if (!hasProfile) {
-            console.log('wrong')
             $location.path('/profileform');
-            cb();
           } else {
-            console.log('cat burglar')
             $location.path('/profilepage');
-            cb();
           }
+          cb();
         })
-
       },
 
       logout (cb) {
