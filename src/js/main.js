@@ -52,6 +52,12 @@ angular
         controllerAs: "profctrl",
         private: true
       })
+      .when('/friendslist', {
+        templateUrl: 'views/friendslist.html',
+        controller: 'FriendsListCtrl',
+        controllerAs: 'flCtrl',
+        private: true
+      })
   })
 
   .filter('objToArr', function () {
@@ -65,6 +71,22 @@ angular
           });
       }
     }
+  })
+
+  .filter('noFriendsInPotFriends', function(Friends) {
+    Friends.getAllFriends(function(friendlist) {
+      Friends.getAll
+    })
+  })
+
+  .controller('FriendsListCtrl', function ($http, $rootScope, API_URL, Friends) {
+    var vm = this;
+
+    Friends.getAllFriends(function (data) {
+      console.log('where are all the friends?');
+      vm.data = data;
+    })
+
   })
 
   .controller('ProfileCtrl', function ($http, API_URL, $rootScope) {
@@ -86,7 +108,16 @@ angular
     var vm = this;
 
     Friends.getAll(function(friends) {
-      vm.potfriends = friends;
+      var PeopleNotYetFriendedArray = Object.keys(friends).map(function (key) {
+        obj[key]._id = key;
+        return obj[key];
+      });
+
+      PeopleNotYetFriendedArray.filter(function(person) {
+        return 
+      })
+
+      // vm.potfriends =
     })
     
     vm.addFriend = function(name, photo_url, id) {
@@ -146,6 +177,8 @@ angular
       getAll(cb) {
         $http
           .get(`${API_URL}profiles.json`)
+          // success function (promise?) will automatically execute the function it's passed;
+          // don't need to execute. In fact, don't execute. It will mess up.
           .success(cb);
       },
 
@@ -164,8 +197,11 @@ angular
         // fb.child("friendlist").push({'id': id});
       },
 
-      getAllFriends(){
-        
+      getAllFriends(cb){
+
+        $http
+          .get(`${API_URL}friendlist/${$rootScope.auth.uid}.json`)
+          .success(cb);
       }
 
     }
