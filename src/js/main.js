@@ -26,6 +26,10 @@ angular
           }
         }
       })
+      .when('/logout', {
+        template: '<h1>Logging out...</h1>',
+        controller: 'LogoutCtrl'
+      })
       .when('/newprofile', {
         templateUrl: 'views/profile.html',
         controller: 'EditProfileCtrl',
@@ -80,10 +84,10 @@ angular
 
   })
 
-  .controller('LogoutCtrl', function($http, Auth) {
+  .controller('LogoutCtrl', function($scope, $location, Auth) {
     Auth.logout(function() {
-      $rootScope.auth = null;
-
+      $location.path('/login');
+      $scope.$apply();
     })
   })
 
