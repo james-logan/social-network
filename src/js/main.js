@@ -1,26 +1,6 @@
 angular
   .module('socialNetwork', ["ngRoute"])
   .constant('API_URL', 'https://socialnetwork.firebaseio.com/')
-  // .controller('LoginCtrl', function ($http, Auth) {
-  //   var vm = this;
-
-  //   vm.login = function () {
-  //     console.log('function firing')
-  //     Auth.login(vm.email, vm.password, function () {
-  //       Auth.requireProfile();
-  //     })
-  //   };
-
-  //   vm.register = function ($location) {
-  //         Auth.register(vm.email, vm.password, function ($location) {
-  //              $location.path("/profileform");
-  //         });
-
-  //   }
-
-  //   vm.showRegistration = false;
-
-  // })
 
   .run(function(Auth, $rootScope) {
      // var fb = new Firebase(API_URL);
@@ -32,15 +12,6 @@ angular
       }
     })
   })
-  // .controller('ProfileCtrl', function ($http, $location, $rootScope) {
-  //    var vm = this;
-
-  //    vm.editProfile = function ($rootScope.auth.uid) {
-  //         $http
-  //              .put(`${API_URL}profiles/${$rootScope.auth.uid}.json`);
-  //    }
-
-  // })
 
   .config(function ($routeProvider) {
     $routeProvider
@@ -118,8 +89,9 @@ angular
       vm.potfriends = friends;
     })
     
-    vm.addFriend = function(id) {
+    vm.addFriend = function(name, photo_url, id) {
       console.log(id);
+      Friends.addFriend(name, photo_url, id, function() {})
     }
 
   })
@@ -168,17 +140,32 @@ angular
     }
   })
 
-  .factory('Friends', function ($http, API_URL) {
+  .factory('Friends', function ($rootScope, $http, API_URL) {
     return {
 
       getAll(cb) {
         $http
-          .get(`${API_URL}/profiles.json`)
+          .get(`${API_URL}profiles.json`)
           .success(cb);
       },
 
-      addFriend(cb) {
+      addFriend(name, photo_url, id, cb) {
+        var data = {
+          'name': name,
+          'photo': photo_url,
+          'id': id
+        }
 
+        $http
+          .put(`${API_URL}friendlist/${$rootScope.auth.uid}/${id}.json`, data)
+          .success(cb);
+
+        // var fb = new Firebase(API_URL);
+        // fb.child("friendlist").push({'id': id});
+      },
+
+      getAllFriends(){
+        
       }
 
     }
