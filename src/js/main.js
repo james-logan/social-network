@@ -1,28 +1,28 @@
 angular
   .module('socialNetwork', ["ngRoute"])
   .constant('API_URL', 'https://socialnetwork.firebaseio.com/')
-  .controller('LoginCtrl', function ($http, Auth) {
-    var vm = this;
+  // .controller('LoginCtrl', function ($http, Auth) {
+  //   var vm = this;
 
-    vm.login = function () {
-         console.log('function firing')
-         Auth.login(vm.email, vm.password, function ($location) {
-               $location.path("/")
-         })
-    };
+  //   vm.login = function () {
+  //        console.log('function firing')
+  //        Auth.login(vm.email, vm.password, function ($location) {
+  //              $location.path("/")
+  //        })
+  //   };
 
-    vm.register = function ($location) {
-          Auth.register(vm.email, vm.password, function ($location) {
-               $location.path("/profileform");
-          });
+  //   vm.register = function ($location) {
+  //         Auth.register(vm.email, vm.password, function ($location) {
+  //              $location.path("/profileform");
+  //         });
 
-    }
+  //   }
 
-    vm.showRegistration = false;
+  //   vm.showRegistration = false;
 
-  })
+  // })
 
-  .run(function(Auth, $rootScope) {
+  .run(function(Auth, $rootScope, API_URL) {
      // var fb = new Firebase(API_URL);
      // $rootScope.auth = fb.getAuth();
   // can access private property within nextRoute argument.
@@ -90,7 +90,16 @@ angular
       }
     }
   })
+  .controller('ProfileCtrl', function ($http, API_URL, $rootScope) {
+    var vm = this;
 
+    vm.data;
+    $http
+      .get(`${API_URL}profiles/${$rootScope.auth.uid}.json`, function (data) {
+        console.log('pixiedust')
+        vm.data = data;
+      })
+  })
   .controller('PotFriendsCtrl', function (Friends) {
     var vm = this;
 
@@ -105,8 +114,7 @@ angular
     vm.login = function () {
       console.log('function firing')
       Auth.login(vm.email, vm.password, function () {
-        Auth.requireProfile();
-        $scope.$apply();
+        Auth.requireProfile(function () {$scope.$apply();});
       })
     };
 
@@ -142,17 +150,17 @@ angular
     }
   })
 
-  // .factory('Friends', function ($http, API_URL) {
-  //   return {
+  .factory('Friends', function ($http, API_URL) {
+    return {
 
-  //     // getAll(cb) {
-  //     //   $http
-  //     //     .get(`${API_URL}/profiles.json`)
-  //     //     .success(cb);
-  //     // }
+      getAll(cb) {
+        $http
+          .get(`${API_URL}/profiles.json`)
+          .success(cb);
+      }
 
-  //   }
-  // })
+    }
+  })
 
   .factory('Auth', function (API_URL, $location, $rootScope) {
     var fb = new Firebase(API_URL);
@@ -163,6 +171,7 @@ angular
         $rootScope.auth = fb.getAuth();
         if (!fb.getAuth()) {
           $location.path('/login');
+          cb();
         } else if ($rootScope.auth && $rootScope.auth.password.isTemporaryPassword) {
           $location.path('/temp_pass')
         }
@@ -175,16 +184,22 @@ angular
 
       // only use requireProfile for users who are already logged in (or you could check for that within the function);
 
-      requireProfile() {
+      requireProfile(cb) {
         var hasProfile;
         fb.child("profiles").child($rootScope.auth.uid).once('value', function(data) {
           hasProfile = data.exists();
+          console.log('hasProfile', hasProfile);
+          if (!hasProfile) {
+            console.log('wrong')
+            $location.path('/profileform');
+            cb();
+          } else {
+            console.log('cat burglar')
+            $location.path('/profilepage');
+            cb();
+          }
         })
-        if (!hasProfile) {
-          $location.path('/profileform');
-        } else {
-          $location.path('/potentialfriends');
-        }
+
       },
 
       logout (cb) {
