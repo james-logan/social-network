@@ -74,7 +74,8 @@ angular
       .when('/profilepage', {
         templateUrl: 'views/profile.html',
         controller: 'ProfileCtrl',
-        controllerAs: "profctrl"
+        controllerAs: "profctrl",
+        private: true
       })
   })
 
@@ -92,11 +93,9 @@ angular
   })
   .controller('ProfileCtrl', function ($http, API_URL, $rootScope) {
     var vm = this;
-
-    vm.data;
     $http
-      .get(`${API_URL}profiles/${$rootScope.auth.uid}.json`, function (data) {
-        console.log('pixiedust')
+      .get(`${API_URL}profiles/${$rootScope.auth.uid}.json`)
+      .success(function (data) {
         vm.data = data;
       })
   })
