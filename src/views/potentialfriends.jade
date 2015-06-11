@@ -1,0 +1,4 @@
+h1 New Friends to Friend
+
+.potfriend(ng-repeat="potfriend in pfctrl.potfriends | objToArr | orderBy:'name' | filter:query")
+  p {{potfriend.name}}

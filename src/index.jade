@@ -8,10 +8,12 @@ html(lang="en-US", ng-app="socialNetwork")
     link(rel="stylesheet" href="lib/build.css")
     //- link(rel="stylesheet" href="assets/main.css")
   body
-     .container
-          h1 Social Networking Site for Friendship Forever
-          a(href="#/login") Login or Register!
-          .app(ng-view)
+    .container
+      nav
+        ul
+          li: a(href="/#/login") Login
+      h1 Social Network Profiles for Friendship Forever
+      .app(ng-view)
 
   script(src="lib/build.js")
   script(src="js/main.js")
