@@ -13,6 +13,8 @@ html(lang="en-US", ng-app="socialNetwork")
         ul
           li(ng-hide="auth"): a(href="/#/login") Login
           li(ng-show="auth"): a(href="/#/logout") Logout
+          li: a(href="/#/potentialfriends") Browse Potential Friends
+          li: a(href="/#/profilepage") My Profile
       h1 Social Network Profiles for Friendship Forever
       .app(ng-view)
 

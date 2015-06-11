@@ -99,16 +99,16 @@ angular
   .controller('ProfileCtrl', function ($http, API_URL, $rootScope) {
     var vm = this;
 
-    var fb = new Firebase(API_URL);
-    fb.child("profiles").child($rootScope.auth.uid).once('value', function(data) {
-      vm.data = data.val();
-    });
+    // var fb = new Firebase(API_URL);
+    // fb.child("profiles").child($rootScope.auth.uid).once('value', function(data) {
+    //   vm.data = data.val();
+    // });
 
-    // $http
-    //   .get(`${API_URL}profiles/${$rootScope.auth.uid}.json`, function (data) {
-    //     console.log('pixiedust')
-    //     vm.data = data;
-    //   })
+    $http
+      .get(`${API_URL}profiles/${$rootScope.auth.uid}.json`)
+      .success(function(data) {
+        vm.data = data
+      })
   })
 
   .controller('PotFriendsCtrl', function (Friends) {
@@ -117,6 +117,11 @@ angular
     Friends.getAll(function(friends) {
       vm.potfriends = friends;
     })
+    
+    vm.addFriend = function(id) {
+      console.log(id);
+    }
+
   })
 
   .controller('LoginCtrl', function ($scope, $http, Auth) {
@@ -170,6 +175,10 @@ angular
         $http
           .get(`${API_URL}/profiles.json`)
           .success(cb);
+      },
+
+      addFriend(cb) {
+
       }
 
     }
