@@ -78,7 +78,8 @@ angular
       .when('/profilepage', {
         templateUrl: 'views/profile.html',
         controller: 'ProfileCtrl',
-        controllerAs: "profctrl"
+        controllerAs: "profctrl",
+        private: true
       })
   })
 
@@ -93,6 +94,21 @@ angular
           });
       }
     }
+  })
+
+  .controller('ProfileCtrl', function ($http, API_URL, $rootScope) {
+    var vm = this;
+
+    var fb = new Firebase(API_URL);
+    fb.child("profiles").child($rootScope.auth.uid).once('value', function(data) {
+      vm.data = data.val();
+    });
+
+    // $http
+    //   .get(`${API_URL}profiles/${$rootScope.auth.uid}.json`, function (data) {
+    //     console.log('pixiedust')
+    //     vm.data = data;
+    //   })
   })
 
   .controller('PotFriendsCtrl', function (Friends) {
@@ -187,7 +203,7 @@ angular
           if (!hasProfile) {
             $location.path('/profileform');
           } else {
-            $location.path('/potentialfriends');
+            $location.path('/profilepage');
           }
           cb();
         })
