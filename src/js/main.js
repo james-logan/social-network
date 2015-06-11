@@ -62,12 +62,19 @@ angular
       .when('/profileform', {
         templateUrl: 'views/profileform.html',
         controller: 'EditProfileCtrl',
-        controllerAs: 'profedit'
+        controllerAs: 'profedit',
+        private: true
       })
       .when('/potentialfriends', {
         templateUrl: 'views/potentialfriends.html',
         controller: 'PotFriendsCtrl',
-        controllerAs: 'pfctrl'
+        controllerAs: 'pfctrl',
+        private: true
+      })
+      .when('/profilepage', {
+        templateUrl: 'views/profile.html',
+        controller: 'ProfileCtrl',
+        controllerAs: "profctrl"
       })
   })
 
@@ -113,28 +120,39 @@ angular
 
   })
 
-  .controller('LogoutCtrl', function($http, Auth) {
+  .controller('LogoutCtrl', function($scope, $location, Auth) {
     Auth.logout(function() {
-      $rootScope.auth = null;
-
+      $location.path('/login');
+      $scope.$apply();
     })
   })
 
-  .controller('EditProfileCtrl', function() {
+  .controller('EditProfileCtrl', function($http, $location, $rootScope, API_URL) {
+    var vm = this;
 
-  })
+    var info = {};
 
-  .factory('Friends', function ($http, API_URL) {
-    return {
-
-      getAll(cb) {
-        $http
-          .get(`${API_URL}/profiles.json`)
-          .success(cb);
-      }
-
+    vm.editProfile = function () {
+      console.log("do things")
+      $http
+        .put(`${API_URL}profiles/${$rootScope.auth.uid}.json`, vm.info)
+        .success(function () {
+          $location.path("/profilepage")
+        })
     }
   })
+
+  // .factory('Friends', function ($http, API_URL) {
+  //   return {
+
+  //     // getAll(cb) {
+  //     //   $http
+  //     //     .get(`${API_URL}/profiles.json`)
+  //     //     .success(cb);
+  //     // }
+
+  //   }
+  // })
 
   .factory('Auth', function (API_URL, $location, $rootScope) {
     var fb = new Firebase(API_URL);

@@ -1,9 +1,9 @@
 form(name="newUserForm")
      form-label Name
-     input(type="text")
+     input(type="text" ng-model="profedit.info.name" required)
      form-label Photo
-     input(type="text")
+     input(type="text" ng-model="profedit.info.photo" required)
      form-label Age
-     input(type="number")
+     input(type="number" ng-model="profedit.info.age" required)
      button(ng-click="profedit.editProfile()") Submit
 

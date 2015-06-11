@@ -11,7 +11,8 @@ html(lang="en-US", ng-app="socialNetwork")
     .container
       nav
         ul
-          li: a(href="/#/login") Login
+          li(ng-hide="auth"): a(href="/#/login") Login
+          li(ng-show="auth"): a(href="/#/logout") Logout
       h1 Social Network Profiles for Friendship Forever
       .app(ng-view)
 
