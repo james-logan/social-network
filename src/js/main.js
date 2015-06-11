@@ -33,12 +33,14 @@ angular
       .when('/newprofile', {
         templateUrl: 'views/profile.html',
         controller: 'EditProfileCtrl',
-        controllerAs: 'profedit'
+        controllerAs: 'profedit',
+        private: true
       })
       .when('/potentialfriends', {
         templateUrl: 'views/potentialfriends.html',
         controller: 'PotFriendsCtrl',
-        controllerAs: 'pfctrl'
+        controllerAs: 'pfctrl',
+        private: true
       })
   })
 

@@ -11,8 +11,8 @@ html(lang="en-US", ng-app="socialNetwork")
     .container
       nav
         ul
-          li: a(href="/#/login") Login
-          li: a(href="/#/logout") Logout
+          li: a(href="/#/login" ng-hide="auth") Login
+          li: a(href="/#/logout" ng-show="auth") Logout
       .app(ng-view)
 
   script(src="lib/build.js")
