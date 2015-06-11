@@ -1,16 +1,46 @@
 angular
   .module('socialNetwork', ["ngRoute"])
   .constant('API_URL', 'https://socialnetwork.firebaseio.com/')
+  // .controller('LoginCtrl', function ($http, Auth) {
+  //   var vm = this;
+
+  //   vm.login = function () {
+  //     console.log('function firing')
+  //     Auth.login(vm.email, vm.password, function () {
+  //       Auth.requireProfile();
+  //     })
+  //   };
+
+  //   vm.register = function ($location) {
+  //         Auth.register(vm.email, vm.password, function ($location) {
+  //              $location.path("/profileform");
+  //         });
+
+  //   }
+
+  //   vm.showRegistration = false;
+
+  // })
 
   .run(function(Auth, $rootScope) {
+     // var fb = new Firebase(API_URL);
+     // $rootScope.auth = fb.getAuth();
   // can access private property within nextRoute argument.
     $rootScope.$on('$routeChangeStart', function(event, nextRoute) {
-
       if (nextRoute.$$route && nextRoute.$$route.private) {
         Auth.requireLogin();
       }
     })
   })
+  // .controller('ProfileCtrl', function ($http, $location, $rootScope) {
+  //    var vm = this;
+
+  //    vm.editProfile = function ($rootScope.auth.uid) {
+  //         $http
+  //              .put(`${API_URL}profiles/${$rootScope.auth.uid}.json`);
+  //    }
+
+  // })
 
   .config(function ($routeProvider) {
     $routeProvider
@@ -30,8 +60,11 @@ angular
         template: '<h1>Logging out...</h1>',
         controller: 'LogoutCtrl'
       })
-      .when('/newprofile', {
-        templateUrl: 'views/profile.html',
+      // .when('/profileform', {
+      //   templateUrl: 'views/profileform.html',
+      //   controller: 'ProfileCtrl',
+      .when('/profileform', {
+        templateUrl: 'views/profileform.html',
         controller: 'EditProfileCtrl',
         controllerAs: 'profedit',
         private: true
@@ -41,6 +74,11 @@ angular
         controller: 'PotFriendsCtrl',
         controllerAs: 'pfctrl',
         private: true
+      })
+      .when('/profilepage', {
+        templateUrl: 'views/profile.html',
+        controller: 'ProfileCtrl',
+        controllerAs: "profctrl"
       })
   })
 
@@ -71,8 +109,9 @@ angular
     vm.login = function () {
       console.log('function firing')
       Auth.login(vm.email, vm.password, function () {
-        Auth.requireProfile();
-        $scope.$apply();
+        Auth.requireProfile(function() {
+          $scope.$apply();
+        });
       })
     };
 
@@ -93,8 +132,19 @@ angular
     })
   })
 
-  .controller('EditProfileCtrl', function() {
+  .controller('EditProfileCtrl', function($http, $location, $rootScope, API_URL) {
+    var vm = this;
 
+    var info = {};
+
+    vm.editProfile = function () {
+      console.log("do things")
+      $http
+        .put(`${API_URL}profiles/${$rootScope.auth.uid}.json`, vm.info)
+        .success(function () {
+          $location.path("/profilepage")
+        })
+    }
   })
 
   .factory('Friends', function ($http, API_URL) {
@@ -130,16 +180,17 @@ angular
 
       // only use requireProfile for users who are already logged in (or you could check for that within the function);
 
-      requireProfile() {
+      requireProfile(cb) {
         var hasProfile;
         fb.child("profiles").child($rootScope.auth.uid).once('value', function(data) {
           hasProfile = data.exists();
+          if (!hasProfile) {
+            $location.path('/profileform');
+          } else {
+            $location.path('/potentialfriends');
+          }
+          cb();
         })
-        if (!hasProfile) {
-          $location.path('/newprofile');
-        } else {
-          $location.path('/potentialfriends');
-        }
       },
 
       logout (cb) {
