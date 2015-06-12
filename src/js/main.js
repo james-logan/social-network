@@ -2,7 +2,7 @@ angular
   .module('socialNetwork', ["ngRoute"])
   .constant('API_URL', 'https://socialnetwork.firebaseio.com/')
 
-  .run(function(Auth, $rootScope, API_URL) {
+  .run(function(Auth, $rootScope) {
      // var fb = new Firebase(API_URL);
      // $rootScope.auth = fb.getAuth();
   // can access private property within nextRoute argument.
@@ -12,15 +12,6 @@ angular
       }
     })
   })
-  // .controller('ProfileCtrl', function ($http, $location, $rootScope) {
-  //    var vm = this;
-
-  //    vm.editProfile = function ($rootScope.auth.uid) {
-  //         $http
-  //              .put(`${API_URL}profiles/${$rootScope.auth.uid}.json`);
-  //    }
-
-  // })
 
   .config(function ($routeProvider) {
     $routeProvider
@@ -90,7 +81,6 @@ angular
       console.log('where are all the friends?')
       vm.data = kittens;
     })
-
   })
 
   .filter('objToArr', function () {
@@ -104,6 +94,22 @@ angular
           });
       }
     }
+  })
+
+  .filter('noFriendsInPotFriends', function(Friends) {
+    Friends.getAllFriends(function(friendlist) {
+      Friends.getAll
+    })
+  })
+
+  .controller('FriendsListCtrl', function ($http, $rootScope, API_URL, Friends) {
+    var vm = this;
+
+    Friends.getAllFriends(function (data) {
+      console.log('where are all the friends?');
+      vm.data = data;
+    })
+
   })
 
   .controller('ProfileCtrl', function ($http, API_URL, $rootScope) {
@@ -125,11 +131,21 @@ angular
     var vm = this;
 
     Friends.getAll(function(friends) {
-      vm.potfriends = friends;
+      var PeopleNotYetFriendedArray = Object.keys(friends).map(function (key) {
+        obj[key]._id = key;
+        return obj[key];
+      });
+
+      PeopleNotYetFriendedArray.filter(function(person) {
+        return
+      })
+
+      // vm.potfriends =
     })
 
-    vm.addFriend = function(id) {
+    vm.addFriend = function(name, photo_url, id) {
       console.log(id);
+      Friends.addFriend(name, photo_url, id, function() {})
     }
 
   })
@@ -178,14 +194,28 @@ angular
     }
   })
 
-  .factory('Friends', function ($http, API_URL, $rootScope) {
+  .factory('Friends', function ($rootScope, $http, API_URL) {
     return {
       getAll(cb) {
         $http
-          .get(`${API_URL}/profiles.json`)
+          .get(`${API_URL}profiles.json`)
+          // success function (promise?) will automatically execute the function it's passed;
+          // don't need to execute. In fact, don't execute. It will mess up.
           .success(cb);
       },
-      addFriend(cb) {
+      addFriend(name, photo_url, id, cb) {
+        var data = {
+          'name': name,
+          'photo': photo_url,
+          'id': id
+        }
+
+        $http
+          .put(`${API_URL}friendlist/${$rootScope.auth.uid}/${id}.json`, data)
+          .success(cb);
+
+        // var fb = new Firebase(API_URL);
+        // fb.child("friendlist").push({'id': id});
       },
       getAllFriends(cb){
         $http
