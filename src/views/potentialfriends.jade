@@ -3,4 +3,4 @@ h1 New Friends to Friend
 .potfriend(ng-repeat="potfriend in pfctrl.potfriends | objToArr | orderBy:'name' | filter:query")
   p {{potfriend.name}}
   img(ng-src="{{potfriend.photo}}")
-  button.btn.btn-primary(ng-click="pfctrl.addFriend(potfriend.name, potfriend.photo, potfriend._id)") Add Friend
+  button.btn.btn-primary.addFriend(ng-click="pfctrl.addFriend(potfriend.name, potfriend.photo, potfriend._id)") Add Friend

@@ -96,12 +96,6 @@ angular
     }
   })
 
-  .filter('noFriendsInPotFriends', function(Friends) {
-    Friends.getAllFriends(function(friendlist) {
-      Friends.getAll
-    })
-  })
-
   .controller('FriendsListCtrl', function ($http, $rootScope, API_URL, Friends) {
     var vm = this;
 
@@ -127,25 +121,52 @@ angular
       })
   })
 
-  .controller('PotFriendsCtrl', function (Friends) {
+  .controller('PotFriendsCtrl', function (Friends, $rootScope, $route) {
     var vm = this;
 
-    Friends.getAll(function(friends) {
-      var PeopleNotYetFriendedArray = Object.keys(friends).map(function (key) {
-        obj[key]._id = key;
-        return obj[key];
+    Friends.getAll(function(people) {
+      var peopleNotYetFriendedArray = Object.keys(people).map(function (key) {
+        people[key]._id = key;
+        return people[key];
       });
 
-      PeopleNotYetFriendedArray.filter(function(person) {
-        return
+      Friends.getAllFriends(function(friends) {
+        if (friends) {
+          var peopleAlreadyFriendedArray = Object.keys(friends).map(function (key) {
+            friends[key]._id = key;
+            return friends[key];
+          });
+        } else {
+          var peopleAlreadyFriendedArray = [];
+        }
+
+        var includeThesePeople = peopleNotYetFriendedArray.filter(function(person) {
+          var alreadyFriended = false;
+          peopleAlreadyFriendedArray.forEach(function(friend) {
+            if (person._id === friend._id || person._id === $rootScope.auth.uid) {
+              alreadyFriended = true;
+            }
+          })
+          if (alreadyFriended === false) {
+            return person;
+          }
+        })
+
+        var return_obj = {};
+
+        includeThesePeople.forEach(function(person) {
+          return_obj[person._id] = {'name': person.name, 'age': person.age, 'photo': person.photo};
+        })
+
+        vm.potfriends = return_obj;
       })
 
-      // vm.potfriends =
     })
 
     vm.addFriend = function(name, photo_url, id) {
       console.log(id);
       Friends.addFriend(name, photo_url, id, function() {})
+      $route.reload();
     }
 
   })
