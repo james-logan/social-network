@@ -1,0 +1,76 @@
+nav {
+  text-align: center;
+}
+
+body {
+  background-image: url(http://static2.wallpedes.com/wallpaper/best/best-friends-forever-hd-wallpaper-with-quotes-best-friend-wallpapers-hd-wallpaper-site-for-mobile-android-download-facebook-2012-app-in-the-world.jpg);
+  background-size: cover;
+}
+
+li {
+  display: inline-block;
+  margin: 0 20px;
+
+  a:hover {
+    text-decoration: none;
+  }
+}
+
+.header {
+  text-align: center;
+  h1 {
+    font-family: 'Courgette', cursive;
+    font-size: 40px;
+  }
+}
+
+.subheader {
+  text-align: center;
+  h1 {
+    font-family: 'Courgette', cursive;
+    font-size: 25px;
+  }
+}
+
+.profile-wrap {
+
+  text-align: center;
+  margin-top: 30px;
+
+  .profile {
+    text-align: center;
+    background: #ddeeff;
+    display: inline-block;
+    border-radius: 15px;
+    padding: 20px;
+    border: 2px solid #aa88ff;
+  }
+}
+
+.potfriend .profile-wrap .profile {
+  margin: 10px 20px;
+  float: left;
+  padding: 15px;
+
+  button {
+    margin-top: 10px;
+    display: block;
+  }
+
+  p {
+    font-size: 16px;
+    font-family: 'Courgette', cursive;
+    color: #331199;
+  }
+
+  img {
+    height: 70px;
+    width: 70px;
+  }
+}
+
+form {
+  form-label {
+    font-family: 'Courgette', cursive;
+  }
+}

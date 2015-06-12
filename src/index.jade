@@ -6,7 +6,8 @@ html(lang="en-US", ng-app="socialNetwork")
     meta(name="viewport", content="width=device-width, initial-scale=1")
     title Social Network
     link(rel="stylesheet" href="lib/build.css")
-    //- link(rel="stylesheet" href="assets/main.css")
+    link(rel="stylesheet" href="css/main.css")
+    link(href='http://fonts.googleapis.com/css?family=Courgette' rel='stylesheet' type='text/css')
   body
     .container
       nav
@@ -17,7 +18,8 @@ html(lang="en-US", ng-app="socialNetwork")
           li(ng-show="auth"): a(href="/#/friendslist") Friend List
           li: a(href="/#/profilepage") My Profile
           li: a(href="/#/profileform") Edit Profile
-      h1 Social Network Profiles for Friendship Forever
+      .header
+        h1 Social Network Profiles for Friendship Forever
       .app(ng-view)
 
   script(src="lib/build.js")
