@@ -7,12 +7,21 @@ body {
   background-size: cover;
 }
 
-li {
-  display: inline-block;
-  margin: 0 20px;
+ul {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 0 0 15px 15px;
 
-  a:hover {
-    text-decoration: none;
+  li {
+    display: inline-block;
+    margin: 0 20px;
+
+    a {
+      color: black;
+    }
+
+    a:hover {
+      text-decoration: none;
+    }
   }
 }
 
@@ -21,6 +30,7 @@ li {
   h1 {
     font-family: 'Courgette', cursive;
     font-size: 40px;
+    color: white;
   }
 }
 
@@ -29,6 +39,7 @@ li {
   h1 {
     font-family: 'Courgette', cursive;
     font-size: 25px;
+    color: white;
   }
 }
 
@@ -44,6 +55,9 @@ li {
     border-radius: 15px;
     padding: 20px;
     border: 2px solid #aa88ff;
+    -webkit-box-shadow: -5px 6px 12px -4px rgba(0,0,0,0.75);
+    -moz-box-shadow: -5px 6px 12px -4px rgba(0,0,0,0.75);
+    box-shadow: -5px 6px 12px -4px rgba(0,0,0,0.75);
   }
 }
 
@@ -66,11 +80,31 @@ li {
   img {
     height: 70px;
     width: 70px;
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-transition-duration: 0.3s;
+    transition-duration: 0.3s;
+    -webkit-transition-property: transform;
+    transition-property: transform;  vertical-align: top;
+
+    -webkit-box-shadow: -5px 6px 12px -4px rgba(0,0,0,0.75);
+    -moz-box-shadow: -5px 6px 12px -4px rgba(0,0,0,0.75);
+    box-shadow: -5px 6px 12px -4px rgba(0,0,0,0.75); 
+  }
+
+  img:hover {
+    cursor: pointer;
+    -webkit-transform: scale(1.1);
+    transform: scale(1.1);
   }
 }
 
 form {
   form-label {
     font-family: 'Courgette', cursive;
+    color: white;
   }
 }
