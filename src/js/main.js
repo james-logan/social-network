@@ -205,6 +205,12 @@ angular
 
     var info = {};
 
+    $http
+      .get(`${API_URL}profiles/${$rootScope.auth.uid}.json`)
+      .success(function(data) {
+        vm.info = data
+      })
+
     vm.editProfile = function () {
       console.log("do things")
       $http

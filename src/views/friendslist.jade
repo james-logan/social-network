@@ -1,7 +1,10 @@
-h1 Old Friends You Already Friended
+.subheader
+  h1 Old Friends You Already Friended
 
 .potfriend(ng-repeat="friend in flCtrl.data | objToArr | orderBy:'name' | filter:query")
-  p {{friend.name}}
-  a(href="#/friendprofile/{{friend.id}}")
-     img(ng-src="{{friend.photo}}")
+  .profile-wrap
+    .profile
+      p {{friend.name}}
+      a(href="#/friendprofile/{{friend.id}}")
+         img(ng-src="{{friend.photo}}")
 

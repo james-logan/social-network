@@ -1,8 +1,10 @@
 form(name="Login Form")
-  form-label Email
-  input(type="text" placeholder="Email" ng-model="logger.email")
-  form-label Password
-  input(type="password" placeholder="Email" ng-model="logger.password")
-  button(ng-click="logger.login()") Login
-  button(ng-click="logger.register()") New User?
-
+  .form-group
+    form-label Email
+    input.form-control(type="text" placeholder="Email" ng-model="logger.email")
+  .form-group
+    form-label Password
+    input.form-control(type="password" placeholder="Password" ng-model="logger.password")
+  .form-group
+    button.btn.btn-default(ng-click="logger.login()") Login
+    button.btn.btn-primary(ng-click="logger.register()") New User?
