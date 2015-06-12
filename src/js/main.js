@@ -96,14 +96,22 @@ angular
     }
   })
 
-  .controller('FriendsListCtrl', function ($http, $rootScope, API_URL, Friends) {
+  .controller('FriendsListCtrl', function ($http, $rootScope, API_URL, Friends, $route) {
     var vm = this;
 
     Friends.getAllFriends(function (data) {
       console.log('where are all the friends?');
       vm.data = data;
     })
-
+    vm.deleteFriend = function (id) {
+      console.log("kittens galore")
+      $http
+        .delete(`${API_URL}friendlist/${$rootScope.auth.uid}/${id}.json`)
+        .success(function () {
+            alert("Your forever friendship is deleted forever...")
+            $route.reload();
+        })
+    }
   })
 
   .controller('ProfileCtrl', function ($http, API_URL, $rootScope) {
@@ -204,7 +212,11 @@ angular
     var vm = this;
 
     var info = {};
-
+    $http
+      .get(`${API_URL}profiles/${$rootScope.auth.uid}.json`)
+      .success(function (data) {
+        vm.info = data;
+      })
     vm.editProfile = function () {
       console.log("do things")
       $http

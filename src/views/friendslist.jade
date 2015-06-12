@@ -4,4 +4,5 @@ h1 Old Friends You Already Friended
   p {{friend.name}}
   a(href="#/friendprofile/{{friend.id}}")
      img(ng-src="{{friend.photo}}")
+  button(ng-click="flCtrl.deleteFriend(friend.id)" value="Unfriend") Unfriend
 
